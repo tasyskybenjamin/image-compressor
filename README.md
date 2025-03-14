@@ -1,33 +1,34 @@
-# 在线图片压缩工具
+# 图片压缩工具
 
-一个简单高效的在线图片压缩工具，无需后端服务器即可运行。
+这是一个简单高效的在线图片压缩工具，使用 Material Design 设计原则构建。
 
-## 特点
+## 功能
 
-- 支持多图片批量上传（最多10张）
-- 支持拖拽上传
-- 实时压缩预览
+- 支持拖拽上传和多文件选择
+- 最多可同时处理10张图片
 - 可调节压缩质量
-- 支持批量下载
-- 完全在浏览器端处理，保护隐私
+- 实时预览压缩效果
+- 支持批量下载压缩后的图片
 
 ## 技术栈
 
-- 原生 JavaScript
-- HTML5 Canvas
-- CSS3 Flexbox
-- File API
+- HTML5
+- CSS3
+- JavaScript
+- Material Design Web Components
 
-## 在线演示
+## 如何使用
 
-访问 [https://tasyskybenjamin.github.io/image-compressor](https://tasyskybenjamin.github.io/image-compressor) 体验
+1. 克隆仓库到本地
+2. 打开 `index.html` 文件在浏览器中查看
+3. 拖拽图片或点击"选择图片"按钮上传图片
+4. 调整压缩质量
+5. 点击"下载压缩后的图片"按钮下载处理后的图片
 
-## 本地运行
+## 贡献
 
-1. 克隆仓库
-2. 使用任意 HTTP 服务器运行（如 Live Server）
-3. 在浏览器中访问
+欢迎提交 Pull Requests 来改进这个工具。如果你发现了 bug 或有新的功能建议，请创建一个 issue。
 
-## License
+## 许可
 
-MIT 
+[MIT License](LICENSE)

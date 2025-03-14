@@ -4,69 +4,127 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图片压缩工具</title>
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="styles.css">
     <meta name="description" content="在线图片压缩工具 - 简单高效的图片压缩服务">
     <link rel="icon" href="favicon.ico">
     <link rel="apple-touch-icon" href="icon.png">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#007AFF">
+    <meta name="theme-color" content="#6200EE">
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>图片压缩工具</h1>
-            <p>简单、高效的在线图片压缩服务</p>
-        </header>
+<body class="mdc-typography">
+    <header class="mdc-top-app-bar">
+        <div class="mdc-top-app-bar__row">
+            <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                <span class="mdc-top-app-bar__title">图片压缩工具</span>
+            </section>
+        </div>
+    </header>
 
-        <main>
-            <div class="upload-area" id="dropZone">
+    <main class="mdc-top-app-bar--fixed-adjust">
+        <div class="container">
+            <div class="mdc-card upload-area" id="dropZone">
                 <input type="file" id="fileInput" accept="image/*" multiple hidden>
-                <div class="upload-content">
-                    <svg class="upload-icon" width="50" height="50" viewBox="0 0 24 24">
-                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                    </svg>
+                <div class="mdc-card__primary-action upload-content">
+                    <i class="material-icons upload-icon">cloud_upload</i>
                     <p>点击或拖拽图片到这里</p>
                     <p class="upload-limit">（最多10张图片）</p>
-                    <button class="upload-btn">选择图片</button>
+                    <button class="mdc-button mdc-button--raised upload-btn">
+                        <span class="mdc-button__label">选择图片</span>
+                    </button>
                 </div>
             </div>
 
             <div class="preview-container" style="display: none;">
-                <div class="batch-preview">
-                    <h3>待处理图片列表</h3>
+                <div class="mdc-card batch-preview">
+                    <h2 class="mdc-typography--headline6">待处理图片列表</h2>
                     <div class="image-list" id="imageList">
                         <!-- 图片列表将在这里动态生成 -->
                     </div>
                 </div>
 
-                <div class="image-comparison">
+                <div class="mdc-card image-comparison">
                     <div class="preview-section">
-                        <h3>原始图片</h3>
+                        <h2 class="mdc-typography--headline6">原始图片</h2>
                         <div class="image-info">
                             <img id="originalPreview" alt="原始图片预览">
-                            <p>大小: <span id="originalSize">0 KB</span></p>
+                            <p class="mdc-typography--body2">大小: <span id="originalSize">0 KB</span></p>
                         </div>
                     </div>
 
                     <div class="preview-section">
-                        <h3>压缩后</h3>
+                        <h2 class="mdc-typography--headline6">压缩后</h2>
                         <div class="image-info">
                             <img id="compressedPreview" alt="压缩后预览">
-                            <p>大小: <span id="compressedSize">0 KB</span></p>
+                            <p class="mdc-typography--body2">大小: <span id="compressedSize">0 KB</span></p>
                         </div>
                     </div>
                 </div>
 
-                <div class="compression-controls">
-                    <label for="quality">压缩质量:</label>
-                    <input type="range" id="quality" min="0" max="100" value="80">
-                    <span id="qualityValue">80%</span>
+                <div class="mdc-card compression-controls">
+                    <label for="quality" class="mdc-typography--body1">压缩质量:</label>
+                    <div class="mdc-slider mdc-slider--discrete mdc-slider--tick-marks">
+                        <input class="mdc-slider__input" type="range" min="0" max="100" value="80" name="quality" id="quality">
+                        <div class="mdc-slider__track">
+                            <div class="mdc-slider__track--inactive"></div>
+                            <div class="mdc-slider__track--active">
+                                <div class="mdc-slider__track--active_fill"></div>
+                            </div>
+                            <div class="mdc-slider__tick-marks">
+                                <div class="mdc-slider__tick-mark--active"></div>
+                                <div class="mdc-slider__tick-mark--inactive"></div>
+                            </div>
+                        </div>
+                        <div class="mdc-slider__thumb">
+                            <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                                <div class="mdc-slider__value-indicator">
+                                    <span class="mdc-slider__value-indicator-text">80</span>
+                                </div>
+                            </div>
+                            <div class="mdc-slider__thumb-knob"></div>
+                        </div>
+                    </div>
+                    <span id="qualityValue" class="mdc-typography--body2">80%</span>
                 </div>
 
-                <button id="downloadBtn" class="download-btn">下载压缩后的图片</button>
+                <button id="downloadBtn" class="mdc-button mdc-button--raised download-btn">
+                    <i class="material-icons mdc-button__icon" aria-hidden="true">file_download</i>
+                    <span class="mdc-button__label">下载压缩后的图片</span>
+                </button>
             </div>
-        </main>
+        </div>
+    </main>
+
+    <footer>
+        <div class="share-buttons">
+            <button class="mdc-button mdc-button--outlined share-btn wechat">
+                <span class="mdc-button__label">分享到微信</span>
+            </button>
+            <button class="mdc-button mdc-button--outlined share-btn weibo">
+                <span class="mdc-button__label">分享到微博</span>
+            </button>
+        </div>
+        
+        <div class="feedback">
+            <a href="https://github.com/tasyskybenjamin/image-compressor/issues" 
+               target="_blank" 
+               class="mdc-button mdc-button--outlined feedback-link">
+                <i class="material-icons mdc-button__icon" aria-hidden="true">feedback</i>
+                <span class="mdc-button__label">反馈问题</span>
+            </a>
+        </div>
+    </footer>
+
+    <div class="mdc-snackbar">
+        <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+            <div class="mdc-snackbar__label" aria-atomic="false">
+            </div>
+        </div>
     </div>
+
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
     <script src="script.js"></script>
 </body>
-</html> 
+</html>

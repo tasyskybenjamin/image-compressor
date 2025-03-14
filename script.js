@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 初始化 Material Design 组件
+    const topAppBar = new mdc.topAppBar.MDCTopAppBar(document.querySelector('.mdc-top-app-bar'));
+    const slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
+    const buttons = document.querySelectorAll('.mdc-button');
+    buttons.forEach(button => new mdc.ripple.MDCRipple(button));
+
     const dropZone = document.getElementById('dropZone');
     const fileInput = document.getElementById('fileInput');
     const uploadBtn = document.querySelector('.upload-btn');
@@ -7,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const compressedPreview = document.getElementById('compressedPreview');
     const originalSize = document.getElementById('originalSize');
     const compressedSize = document.getElementById('compressedSize');
-    const qualitySlider = document.getElementById('quality');
     const qualityValue = document.getElementById('qualityValue');
     const downloadBtn = document.getElementById('downloadBtn');
     const imageList = document.getElementById('imageList');
@@ -26,23 +31,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // 拖拽事件
     dropZone.addEventListener('dragover', (e) => {
         e.preventDefault();
-        dropZone.classList.add('drag-over');
+        dropZone.classList.add('mdc-elevation--z4');
     });
 
     dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('drag-over');
+        dropZone.classList.remove('mdc-elevation--z4');
     });
 
     dropZone.addEventListener('drop', (e) => {
         e.preventDefault();
-        dropZone.classList.remove('drag-over');
+        dropZone.classList.remove('mdc-elevation--z4');
         const files = e.dataTransfer.files;
         handleFiles(Array.from(files));
     });
 
     // 质量滑块事件
-    qualitySlider.addEventListener('input', () => {
-        qualityValue.textContent = `${qualitySlider.value}%`;
+    slider.listen('MDCSlider:change', () => {
+        qualityValue.textContent = `${slider.getValue()}%`;
         // 重新压缩所有图片
         imagesToProcess.forEach(item => {
             compressImageInList(item.file, item.element);
@@ -61,14 +66,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleFiles(files) {
         // 限制文件数量
         if (files.length > 10) {
-            alert('一次最多只能上传10张图片！');
+            showSnackbar('一次最多只能上传10张图片！');
             return;
         }
 
         // 过滤非图片文件
         const imageFiles = files.filter(file => file.type.match('image.*'));
         if (imageFiles.length === 0) {
-            alert('请选择图片文件！');
+            showSnackbar('请选择图片文件！');
             return;
         }
 
@@ -92,15 +97,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const reader = new FileReader();
         reader.onload = (e) => {
             const div = document.createElement('div');
-            div.className = 'image-item';
+            div.className = 'mdc-card image-item';
             div.innerHTML = `
                 <img src="${e.target.result}" alt="预览图片">
-                <div class="item-info">
-                    <div>${file.name}</div>
-                    <div class="size-info">原始：${formatFileSize(file.size)} / 压缩后：--</div>
-                    <div class="status">待处理</div>
+                <div class="mdc-card__content item-info">
+                    <div class="mdc-typography--body2">${file.name}</div>
+                    <div class="mdc-typography--caption size-info">原始：${formatFileSize(file.size)} / 压缩后：--</div>
+                    <div class="mdc-typography--caption status">待处理</div>
                 </div>
-                <button class="remove-btn" data-index="${index}">×</button>
+                <button class="mdc-icon-button material-icons remove-btn" data-index="${index}">close</button>
             `;
 
             // 添加删除按钮事件
@@ -126,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleFile(file) {
         if (!file.type.match('image.*')) {
-            alert('请选择图片文件！');
+            showSnackbar('请选择图片文件！');
             return;
         }
 
@@ -157,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ctx.drawImage(img, 0, 0);
 
-        const quality = qualitySlider.value / 100;
+        const quality = slider.getValue() / 100;
         const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
 
         compressedPreview.src = compressedDataUrl;
@@ -185,7 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 添加新函数：压缩列表中的图片
     function compressImageInList(file, element) {
         const img = new Image();
         img.onload = () => {
@@ -196,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
             canvas.height = img.height;
             ctx.drawImage(img, 0, 0);
 
-            const quality = qualitySlider.value / 100;
+            const quality = slider.getValue() / 100;
             const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
 
             // 计算压缩后的大小
@@ -243,4 +247,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
-}); 
+
+    function shareToWeChat() {
+        showSnackbar('请截图后在微信中分享');
+    }
+
+    function shareToWeibo() {
+        const text = '推荐一个好用的在线图片压缩工具';
+        const url = window.location.href;
+        const weiboUrl = `http://service.weibo.com/share/share.php?url=${encodeURIComponent(url)}&title=${encodeURIComponent(text)}`;
+        window.open(weiboUrl, '_blank');
+    }
+
+    function showSnackbar(message) {
+        const snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector('.mdc-snackbar'));
+        snackbar.labelText = message;
+        snackbar.open();
+    }
+
+    // 初始化分享按钮
+    document.querySelector('.wechat').addEventListener('click', shareToWeChat);
+    document.querySelector('.weibo').addEventListener('click', shareToWeibo);
+});
